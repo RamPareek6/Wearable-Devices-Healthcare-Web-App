@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1 class="my-4">Trainer Dashboard</h1>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h4>Select Patient</h4>
+    </div>
+    <div class="card-body">
+      <form method="POST" action="{{ url_for('dashboard_trainer') }}">
+        <div class="mb-3">
+          <label for="patient_username" class="form-label">Patient Username</label>
+          <select name="patient_username" id="patient_username" class="form-select">
+            {% for patient in patients %}
+              <option value="{{ patient.username }}" {% if patient.username == selected_patient.username %}selected{% endif %}>
+                {{ patient.username }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">View Patient</button>
+      </form>
+    </div>
+  </div>
+
+  {% if selected_patient %}
+    {% set grouped_data = {} %}
+    {% for entry in patient_data %}
+      {% set group_key = entry['device'].device_type ~ ' - ' ~ entry['device'].device_model %}
+      {% if grouped_data[group_key] is not defined %}
+        {% set _ = grouped_data.update({group_key: []}) %}
+      {% endif %}
+      {% set _ = grouped_data[group_key].append(entry) %}
+    {% endfor %}
+
+    {% for device_label, entries in grouped_data.items() %}
+      <div class="card mb-4">
+        <div class="card-header">
+          <h4>{{ device_label }}</h4>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>Heart Rate</th>
+                  <th>Oxygen Level</th>
+                  <th>Steps</th>
+                  <th>Blood Pressure</th>
+                  <th>Temperature</th>
+                  <th>Remark</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for data in entries %}
+                  <tr>
+                    <td>{{ data['data'].heart_rate }}</td>
+                    <td>{{ data['data'].oxygen_level }}</td>
+                    <td>{{ data['data'].steps }}</td>
+                    <td>{{ data['data'].blood_pressure }}</td>
+                    <td>{{ data['data'].temperature }}</td>
+                    <td>
+                      {% if data['prescription'] %}
+                        {{ data['prescription'].prescription }}
+                      {% else %}
+                        <em>No prescription</em>
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if data['remark'] %}
+                        {{ data['remark'].remark }}
+                      {% else %}
+                        <em>No remark</em>
+                      {% endif %}
+                    </td>
+                    <td>
+                      <form action="{{ url_for('add_remark', data_id=data['id']) }}" method="POST">
+                        <input type="hidden" name="patient_username" value="{{ selected_patient.username }}">
+                        <div class="mb-2">
+                          <textarea name="remark" class="form-control" placeholder="Add or update remark" rows="3">{{ data['remark'].remark if data['remark'] else '' }}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-secondary btn-sm">Submit Remark</button>
+                      </form>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+  {% else %}
+    <div class="alert alert-warning mt-4">No patient selected. Please choose a patient to view their data.</div>
+  {% endif %}
+{% endblock %}

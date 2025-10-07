@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="text-primary">Your Devices</h2>
+  <a href="{{ url_for('register_device') }}" class="btn btn-outline-primary">Register New Device</a>
+</div>
+
+{% if devices %}
+  {% for device in devices %}
+    <div class="card shadow-sm mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">{{ device.device_type }} - {{ device.device_model }}</h5>
+      </div>
+      <div class="card-body">
+        <p><strong>Firmware:</strong> {{ device.firmware_version }}</p>
+        <p><strong>Registered On:</strong> {{ device.registered_on.strftime('%Y-%m-%d %H:%M') }}</p>
+        <a href="{{ url_for('upload_data', device_id=device.id) }}" class="btn btn-success mb-3">Upload Health Data</a>
+
+        {% if device_data %}
+          <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-bordered table-hover align-middle">
+              <thead class="table-secondary">
+                <tr>
+                  <th scope="col">Recorded At</th>
+                  <th scope="col">Heart Rate</th>
+                  <th scope="col">Oxygen Level</th>
+                  <th scope="col">Steps</th>
+                  <th scope="col">Blood Pressure</th>
+                  <th scope="col">Temperature</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for record in device_data[device.id]|sort(attribute='recorded_at', reverse=True) %}
+                <tr>
+                  <td>{{ record.recorded_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                  <td>{{ record.heart_rate }} bpm</td>
+                  <td>{{ record.oxygen_level }} %</td>
+                  <td>{{ record.steps }}</td>
+                  <td>{{ record.blood_pressure }}</td>
+                  <td>{{ record.temperature }} °C</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="text-muted">No health data recorded yet.</p>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <p class="text-muted">You haven’t registered any devices yet.</p>
+{% endif %}
+{% endblock %}

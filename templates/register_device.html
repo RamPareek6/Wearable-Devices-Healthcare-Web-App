@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">Register a New Wearable Device</h2>
+
+  <form method="POST" class="card p-4 shadow-sm border-0">
+    <div class="mb-3">
+      <label for="device_type" class="form-label">Device Type</label>
+      <input type="text" class="form-control" name="device_type" id="device_type" placeholder="e.g., Smartwatch" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="device_model" class="form-label">Device Model</label>
+      <input type="text" class="form-control" name="device_model" id="device_model" placeholder="e.g., FitPro X2" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="firmware_version" class="form-label">Firmware Version</label>
+      <input type="text" class="form-control" name="firmware_version" id="firmware_version" placeholder="e.g., v1.2.3" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Register Device</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="text-center">
+    <h1 class="display-4 fw-bold">Welcome to the Smart Fitness RBAC App</h1>
+    <p class="lead">Track. Train. Transform. Secure access to personalized fitness data for users, trainers, and admins.</p>
+    <div class="mt-4">
+      {% if not session.get('user_id') %}
+        <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg m-2">Login</a>
+        <a href="{{ url_for('signup') }}" class="btn btn-outline-primary btn-lg m-2">Sign Up</a>
+      {% else %}
+        <p class="lead">Welcome back, {{ session.get('user_id') }}! 🏋️‍♂️</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <hr class="my-5">
+
+  <div class="row text-center">
+    <div class="col-md-4 mb-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <h5 class="card-title">🔒 Role-Based Access</h5>
+          <p class="card-text">Only authorized users can access specific fitness data and insights. Secure, flexible, and role-aware access management.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <h5 class="card-title">📊 Real-Time Fitness Tracking</h5>
+          <p class="card-text">Monitor metrics like heart rate, steps, oxygen levels, and more with real-time updates from your fitness devices.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <h5 class="card-title">🏋️ Personalized Dashboards</h5>
+          <p class="card-text">Whether you're a user, personal trainer, or admin — access dashboards tailored to your role, including performance logs, feedback, and alerts.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="my-5">
+
+  <div class="text-center">
+    <h4 class="mb-3">Designed for Fitness Enthusiasts and Professionals</h4>
+    <p class="text-muted">Empowering individuals and coaches with smart, secure access to vital fitness insights powered by advanced Role-Based Access Control (RBAC).</p>
+    <p class="text-muted">Seamless integration with wearables, real-time analysis, and personalized fitness experiences.</p>
+  </div>
+</div>
+{% endblock %}
