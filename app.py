@@ -19,9 +19,9 @@ login_manager.init_app(app)
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # or use your provider
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'anonymouskhiladi7@gmail.com'
-app.config['MAIL_PASSWORD'] = 'paek qtft jnvg ljaj'  # Use app-specific password for Gmail
-app.config['MAIL_DEFAULT_SENDER'] = 'anonymouskhiladi7@gmail.com'
+app.config['MAIL_USERNAME'] = 'example@gmail.com'
+app.config['MAIL_PASSWORD'] = 'paeljaj'  # Use app-specific password for Gmail
+app.config['MAIL_DEFAULT_SENDER'] = 'example@gmail.com'
 
 
 mail = Mail(app)
@@ -903,3 +903,4 @@ def send_emergency_email(to_email, patient_name, location=None):
 
 if __name__ == '__main__':
     app.run(debug=True)
+
